@@ -3,32 +3,20 @@ pipeline {
 
     stages {
 
-        stage('Create Virtual Environment') {
-            steps {
-                sh 'python3 -m venv venv'
-            }
-        }
-
         stage('Install Dependencies') {
             steps {
                 sh '''
-                . venv/bin/activate
-                pip install -r requirements.txt
+                python3 -m venv venv
+                ./venv/bin/pip install --break-system-packages -r requirements.txt
                 '''
             }
         }
 
-        stage('Stop Old App') {
-            steps {
-                sh 'pkill -f app.py || true'
-            }
-        }
-
-        stage('Run App') {
+        stage('Run Application') {
             steps {
                 sh '''
-                . venv/bin/activate
-                nohup python app.py > app.log 2>&1 &
+                pkill -f app.py || true
+                nohup ./venv/bin/python app.py > app.log 2>&1 &
                 '''
             }
         }
