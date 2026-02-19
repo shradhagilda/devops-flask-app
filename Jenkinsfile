@@ -1,6 +1,5 @@
 pipeline {
     agent any
-
     stages {
         stage('Install Dependencies') {
             steps {
@@ -13,17 +12,15 @@ pipeline {
                 '''
             }
         }
-
         stage('Run Application') {
             steps {
                 sh '''
                 pkill -f app.py || true
                 nohup venv/bin/python app.py > app.log 2>&1 &
                 sleep 5
+                echo "Flask app deployed!"
                 '''
             }
         }
     }
 }
-
-
